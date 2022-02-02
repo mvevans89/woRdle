@@ -31,13 +31,18 @@ play_woRdle <- function(date2play = Sys.Date()){
                            letters_guessed = letters.guessed)
 
 
-    #check it is actually a word
+    #check it is actually a word, has 5 letters, and is only letters
     word.check <- check_is_word(paste0(this.guess$guess, collapse = ""))
-    while(word.check == "not_a_word" | length(this.guess$guess) != 5){ #if not a word, request a new one
+    valid.symbols <- check_valid_letters(this.guess$guess)
+    #will be true if fails any of three checks
+    full.check <- word.check == "not_a_word" | length(this.guess$guess) != 5 | valid.symbols != "valid"
+    while(full.check){ #if not a word, request a new one
       print(paste0("The word you guessed (", paste0(this.guess$guess, collapse = ""),") is not a 5-letter word. Please guess again"))
       this.guess <- guess_fn(round.num, today_word = today.word, today_word_list = today.word.list,
                              letters_guessed = letters.guessed)
       word.check <- check_is_word(paste0(this.guess$guess, collapse = ""))
+      valid.symbols <- check_valid_letters(this.guess$guess)
+      full.check <- word.check == "not_a_word" | length(this.guess$guess) != 5 | valid.symbols != "valid"
     }
 
     #keep track of score
@@ -61,11 +66,14 @@ play_woRdle <- function(date2play = Sys.Date()){
   #return ascii to share
   # print(c("Great!", "Splendid!", "Good Job!", "Awesome!")[sample(1:4,1)])
   #print
-  print(paste0("woRdle #", word.ind, " : ", i, "/6"))
+  if(round.num == 7){
+    print(paste0("woRdle #", word.ind, " : ", i, "Not completed"))
+  } else  print(paste0("woRdle #", word.ind, " : ", i, "/6"))
+
   cat(unlist(guess.matrix), sep = "\n")
 
   #you failed! so I guess you can know the word now
-  if(i == 6){
+  if(round.num == 7){
     print(paste0("Today's word : ", today.word))
   }
 
@@ -112,6 +120,14 @@ check_is_word <- function(guessed_word){
   if(nrow(spell.check)>0){
     return("not_a_word")
   } else return("word_confirmed")
+}
+
+check_valid_letters <- function(guessed_word){
+  #check that all the letters are valid letters of roman alphabet
+  num.letters <- sum(guessed_word %in% LETTERS)
+  if(num.letters != 5){
+    return("not_valid")
+  } else return("valid")
 }
 
 create_score_line <- function(guess_color_index){
