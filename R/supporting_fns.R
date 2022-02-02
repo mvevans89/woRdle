@@ -1,0 +1,121 @@
+# source functions
+
+play_woRdle <- function(date2play = Sys.Date()){
+  #' master function to play
+  #' @param date2play the date of the world you want to play, defaults to today's date
+  #' play_woRdle(Sys.Date()+9)
+
+  #identify today's word
+  all.words <-  read.csv("data/final-words.csv")
+  all.words$date <- as.Date(all.words$date)
+  #check that the date supplied is in our file
+  if(date2play %in% all.words$date){
+    word.ind <- which(as.Date(all.words$date)==date2play)
+    today.word <- toupper(all.words$word[word.ind])
+  } else {
+    print("The date you entered was not valid. Try again by using the Sys.Date()")
+    stop()
+  }
+  today.word.list <- c(unlist(strsplit(today.word, split = "")))
+
+  #set up the plot
+  par(mfrow = c(6,5), mar = rep(0.2,4), bg = "#121213")
+  #set up matrix for score sharing
+  guess.matrix <- list()
+
+
+  # guessing ########
+  round.num = 1
+  letters.guessed <- c()
+
+  for(i in 1:6){
+    this.guess <- guess_fn(round.num, today_word = today.word, today_word_list = today.word.list,
+                           letters_guessed = letters.guessed)
+    #check it is actually a word
+    word.check <- check_is_word(paste0(this.guess$guess, collapse = ""))
+    while(word.check == "not_a_word"){ #if not a word, request a new one
+      print(paste0("The word you guessed (", paste0(this.guess$guess, collapse = ""),") is not a word. Please guess again"))
+      this.guess <- guess_fn(round.num, today_word = today.word, today_word_list = today.word.list,
+                             letters_guessed = letters.guessed)
+      word.check <- check_is_word(paste0(this.guess$guess, collapse = ""))
+    }
+
+    #keep track of score
+    guess.matrix[[i]] <- create_score_line(this.guess$color.index)
+    #keep track of letters guessed
+    letters.guessed <- unique(sort(c(letters.guessed, this.guess$guess)))
+
+    #plot of current guess
+    Map(plot_location,
+        color_ind = this.guess$color.index,
+        guess_letter = this.guess$guess)
+
+
+    #evaluate, if guess is correct then break
+    if(sum(this.guess$color.index==3)==5){
+      break
+
+    }
+    round.num <- round.num + 1
+  }
+  #return ascii to share
+  # print(c("Great!", "Splendid!", "Good Job!", "Awesome!")[sample(1:4,1)])
+  #print
+  print(paste0("woRdle #", word.ind, " : ", i, "/6"))
+  cat(unlist(guess.matrix), sep = "\n")
+
+}
+
+
+plot_location <- function(color_ind, guess_letter){
+  #decide the color
+  this.color <- c("#3A3A3C", "#B1A04C", "#618B55")[color_ind]
+  #blank plot
+  plot(1, type = "n",
+       xlab = "", ylab = "",
+       xlim = c(0, 10), ylim = c(0, 10),
+       xaxt='n', yaxt = 'n')
+  #set color based on letter
+  rect(par("usr")[1], par("usr")[3],
+       par("usr")[2], par("usr")[4],
+       col = this.color) # Color
+  text(5,5, label = guess_letter, cex = 4)
+}
+
+guess_fn <- function(round.num,
+                  today_word = today.word,
+                  today_word_list = today.word.list,
+                  letters_guessed = letters.guessed){
+  this.guess <- toupper(readline(paste("Round", round.num, "guess:\nLetters Guessed:", paste(letters_guessed, collapse = ","))))
+  this.guess.list <- c(unlist(strsplit(this.guess, split = "")))
+
+  wrong.location <- sapply(this.guess.list, grepl, today_word)
+  right.location <- this.guess.list == today_word_list
+
+  color.index <- wrong.location + right.location +1
+
+  return(list(color.index = color.index, guess = this.guess.list))
+
+}
+
+check_is_word <- function(guessed_word){
+  #use spelling package to check it is a word
+  spell.check <- spelling::spell_check_text(guessed_word, ignore = character(), lang = "en_US")
+  if(nrow(spell.check)>0){
+    return("not_a_word")
+  } else return("word_confirmed")
+}
+
+create_score_line <- function(guess_color_index){
+  symbol.choice <- c(".", "/", "O")
+  #creates the ascii score line
+  top <- "  _   _   _   _   _ "
+  # middle.blank <- " |.| |.| |.| |.| |.| "
+  middle <- paste0(" |", symbol.choice[guess_color_index[1]], "| |",
+                   symbol.choice[guess_color_index[2]], "| |",
+                   symbol.choice[guess_color_index[3]], "| |",
+                   symbol.choice[guess_color_index[4]], "| |",
+                   symbol.choice[guess_color_index[5]], "| ")
+  return(c(top,middle))
+}
+
