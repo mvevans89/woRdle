@@ -30,10 +30,11 @@ play_woRdle <- function(date2play = Sys.Date()){
     this.guess <- guess_fn(round.num, today_word = today.word, today_word_list = today.word.list,
                            letters_guessed = letters.guessed)
 
+
     #check it is actually a word
     word.check <- check_is_word(paste0(this.guess$guess, collapse = ""))
-    while(word.check == "not_a_word"){ #if not a word, request a new one
-      print(paste0("The word you guessed (", paste0(this.guess$guess, collapse = ""),") is not a word. Please guess again"))
+    while(word.check == "not_a_word" | length(this.guess$guess) != 5){ #if not a word, request a new one
+      print(paste0("The word you guessed (", paste0(this.guess$guess, collapse = ""),") is not a 5-letter word. Please guess again"))
       this.guess <- guess_fn(round.num, today_word = today.word, today_word_list = today.word.list,
                              letters_guessed = letters.guessed)
       word.check <- check_is_word(paste0(this.guess$guess, collapse = ""))
