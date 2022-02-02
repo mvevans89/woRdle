@@ -105,9 +105,12 @@ guess_fn <- function(round.num,
   this.guess.list <- c(unlist(strsplit(this.guess, split = "")))
 
   wrong.location <- sapply(this.guess.list, grepl, today_word)
-  right.location <- this.guess.list == today_word_list
+  suppressWarnings({ #suppress for when words of wrong length are guessed
+    right.location <- this.guess.list == today_word_list
+    color.index <- wrong.location + right.location +1
+    })
 
-  color.index <- wrong.location + right.location +1
+
 
   return(list(color.index = color.index, guess = this.guess.list))
 
