@@ -1,13 +1,13 @@
 # source functions
 
+
+
 play_woRdle <- function(date2play = Sys.Date()){
   #' master function to play
   #' @param date2play the date of the world you want to play, defaults to today's date
   #' play_woRdle(Sys.Date()+9)
 
   #identify today's word
-  all.words <-  read.csv("data/final-words.csv")
-  all.words$date <- as.Date(all.words$date)
   #check that the date supplied is in our file
   if(date2play %in% all.words$date){
     word.ind <- which(as.Date(all.words$date)==date2play)

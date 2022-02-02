@@ -10,3 +10,7 @@
 #                       word = sample(good.words, length(good.words)))
 #save
 # write.csv(word.df, "final-words.csv", row.names = F) #already saved
+
+# all.words <- read.csv("data/final-words.csv")
+# all.words$date <- as.Date(all.words$date)
+# usethis::use_data(all.words, internal = T, overwrite = T)
