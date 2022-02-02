@@ -1,7 +1,5 @@
 # source functions
 
-
-
 play_woRdle <- function(date2play = Sys.Date()){
   #' master function to play
   #' @param date2play the date of the world you want to play, defaults to today's date
@@ -87,7 +85,9 @@ guess_fn <- function(round.num,
                   today_word = today.word,
                   today_word_list = today.word.list,
                   letters_guessed = letters.guessed){
-  this.guess <- toupper(readline(paste("Round", round.num, "guess:\nLetters Guessed:", paste(letters_guessed, collapse = ","))))
+  print(paste("Letters Guessed:", paste(letters_guessed, collapse = ", ")))
+  print("- - - - - - - - - - - - - - - - - - - - - - - - -")
+  this.guess <- toupper(readline(paste("Round", round.num, "guess:")))
   this.guess.list <- c(unlist(strsplit(this.guess, split = "")))
 
   wrong.location <- sapply(this.guess.list, grepl, today_word)
