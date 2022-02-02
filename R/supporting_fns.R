@@ -31,6 +31,7 @@ play_woRdle <- function(date2play = Sys.Date()){
   for(i in 1:6){
     this.guess <- guess_fn(round.num, today_word = today.word, today_word_list = today.word.list,
                            letters_guessed = letters.guessed)
+
     #check it is actually a word
     word.check <- check_is_word(paste0(this.guess$guess, collapse = ""))
     while(word.check == "not_a_word"){ #if not a word, request a new one
@@ -99,6 +100,7 @@ guess_fn <- function(round.num,
 }
 
 check_is_word <- function(guessed_word){
+  #' @import spelling
   #use spelling package to check it is a word
   spell.check <- spelling::spell_check_text(guessed_word, ignore = character(), lang = "en_US")
   if(nrow(spell.check)>0){
