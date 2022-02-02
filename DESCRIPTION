@@ -4,7 +4,7 @@ Title: Play WoRdle
 Version: 0.1.0
 Author: Michelle Evans (@mvevans89)
 Maintainer: Michell Evans <mv.evans.phd@gmail.com>
-Description: A package to play the worlde game (https://www.powerlanguage.co.uk/wordle/) within R via the console.
+Description: Play wordle in the console
 License: MIT License
 Encoding: UTF-8
 LazyData: true
