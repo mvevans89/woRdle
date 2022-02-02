@@ -63,6 +63,11 @@ play_woRdle <- function(date2play = Sys.Date()){
   print(paste0("woRdle #", word.ind, " : ", i, "/6"))
   cat(unlist(guess.matrix), sep = "\n")
 
+  #you failed! so I guess you can know the word now
+  if(i == 6){
+    print(paste0("Today's word : ", today.word))
+  }
+
 }
 
 
