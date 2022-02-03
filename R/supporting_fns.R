@@ -134,15 +134,21 @@ check_valid_letters <- function(guessed_word){
 }
 
 create_score_line <- function(guess_color_index){
-  symbol.choice <- c(".", "/", "O")
+  symbol.choice <- c(":(", ":|", ":)")
   #creates the ascii score line
-  top <- "  _   _   _   _   _ "
+  # top <- "  _   _   _   _   _ "
+  top.blank <- "             "
   # middle.blank <- " |.| |.| |.| |.| |.| "
-  middle <- paste0(" |", symbol.choice[guess_color_index[1]], "| |",
-                   symbol.choice[guess_color_index[2]], "| |",
-                   symbol.choice[guess_color_index[3]], "| |",
-                   symbol.choice[guess_color_index[4]], "| |",
-                   symbol.choice[guess_color_index[5]], "| ")
-  return(c(top,middle))
+  # middle <- paste0(" |", symbol.choice[guess_color_index[1]], "| |",
+  #                  symbol.choice[guess_color_index[2]], "| |",
+  #                  symbol.choice[guess_color_index[3]], "| |",
+  #                  symbol.choice[guess_color_index[4]], "| |",
+  #                  symbol.choice[guess_color_index[5]], "| ")
+  middle.nobar <- paste0(" ", symbol.choice[guess_color_index[1]], "   ",
+                         symbol.choice[guess_color_index[2]], "   ",
+                         symbol.choice[guess_color_index[3]], "   ",
+                         symbol.choice[guess_color_index[4]], "   ",
+                         symbol.choice[guess_color_index[5]], "   ")
+  return(c(top.blank,middle.nobar))
 }
 
