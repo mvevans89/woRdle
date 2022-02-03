@@ -134,21 +134,24 @@ check_valid_letters <- function(guessed_word){
 }
 
 create_score_line <- function(guess_color_index){
-  symbol.choice <- c(":(", ":|", ":)")
+  # symbol.choice <- c(":(", ":|", ":)")
+  symbol.choice <- c("X", "°", "0")
   #creates the ascii score line
-  # top <- "  _   _   _   _   _ "
-  top.blank <- "             "
+  top <- "  _ _ _ _ _ _ _ _ _  "
+  # top.blank <- "             "
+  bottom <- " ¯ ¯ ¯ ¯ ¯ ¯ ¯ ¯ ¯ ¯ "
   # middle.blank <- " |.| |.| |.| |.| |.| "
-  # middle <- paste0(" |", symbol.choice[guess_color_index[1]], "| |",
-  #                  symbol.choice[guess_color_index[2]], "| |",
-  #                  symbol.choice[guess_color_index[3]], "| |",
-  #                  symbol.choice[guess_color_index[4]], "| |",
-  #                  symbol.choice[guess_color_index[5]], "| ")
-  middle.nobar <- paste0(" ", symbol.choice[guess_color_index[1]], "   ",
-                         symbol.choice[guess_color_index[2]], "   ",
-                         symbol.choice[guess_color_index[3]], "   ",
-                         symbol.choice[guess_color_index[4]], "   ",
-                         symbol.choice[guess_color_index[5]], "   ")
-  return(c(top.blank,middle.nobar))
+  middle <- paste0(" |", symbol.choice[guess_color_index[1]], "| |",
+                   symbol.choice[guess_color_index[2]], "| |",
+                   symbol.choice[guess_color_index[3]], "| |",
+                   symbol.choice[guess_color_index[4]], "| |",
+                   symbol.choice[guess_color_index[5]], "| ")
+  # middle.nobar <- paste0(" ", symbol.choice[guess_color_index[1]], "   ",
+  #                        symbol.choice[guess_color_index[2]], "   ",
+  #                        symbol.choice[guess_color_index[3]], "   ",
+  #                        symbol.choice[guess_color_index[4]], "   ",
+  #                        symbol.choice[guess_color_index[5]], "   ")
+  return(c(top,middle, bottom))
 }
 
+cat(create_score_line(c(1,2,3,2,1)), sep = "\n")
