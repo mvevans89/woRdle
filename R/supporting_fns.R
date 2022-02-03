@@ -154,4 +154,4 @@ create_score_line <- function(guess_color_index){
   return(c(top,middle, bottom))
 }
 
-cat(create_score_line(c(1,2,3,2,1)), sep = "\n")
+# cat(create_score_line(c(1,2,3,2,1)), sep = "\n")
